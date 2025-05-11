@@ -1,20 +1,24 @@
 from processamento_dados import Dados
 
-# Definindo os caminhos para os arquivos de dados
+# Caminhos para os arquivos de dados brutos
 path_json = 'data_raw/dados_empresaA.json'
 path_csv = 'data_raw/dados_empresaB.csv'
 
-# Extraindo dados da Empresa A
+# Instancia os dados da Empresa A (formato JSON)
 dados_empresaA = Dados(path_json, 'json')
-print(dados_empresaA.nome_colunas)  # Exibe os nomes das colunas da Empresa A
-print(dados_empresaA.qtd_linhas)     # Exibe a quantidade de linhas da Empresa A
 
-# Extraindo dados da Empresa B
+# Exibe informações básicas
+print(dados_empresaA.nome_colunas)  # Colunas presentes no JSON
+print(dados_empresaA.qtd_linhas)    # Número de registros
+
+# Instancia os dados da Empresa B (formato CSV)
 dados_empresaB = Dados(path_csv, 'csv')
-print(dados_empresaB.nome_colunas)  # Exibe os nomes das colunas da Empresa B
-print(dados_empresaB.qtd_linhas)     # Exibe a quantidade de linhas da Empresa B
 
-# Transformando os nomes das colunas para padronização
+# Exibe informações básicas
+print(dados_empresaB.nome_colunas)
+print(dados_empresaB.qtd_linhas)
+
+# Mapeamento para padronizar os nomes das colunas entre os dois arquivos
 key_mapping = {
     'Nome do Item': 'Nome do Produto',
     'Classificação do Produto': 'Categoria do Produto',
@@ -24,17 +28,17 @@ key_mapping = {
     'Data da Venda': 'Data da Venda'
 }
 
-# Renomeando as colunas da Empresa B
+# Renomeia colunas do CSV com base no mapeamento
 dados_empresaB.rename_columns(key_mapping)
-print(dados_empresaB.nome_colunas)  # Exibe os novos nomes das colunas da Empresa B
 
-# Realizando a fusão dos dados das duas empresas
+# Junta os dois conjuntos de dados
 dados_fusao = Dados.join(dados_empresaA, dados_empresaB)
-print(dados_fusao.nome_colunas)      # Exibe os nomes das colunas do conjunto de dados combinado
-print(dados_fusao.qtd_linhas)         # Exibe a quantidade de linhas no conjunto de dados combinado
 
-# Salvando os dados combinados em um novo arquivo CSV
+# Exibe resultado final
+print(dados_fusao.nome_colunas)
+print(dados_fusao.qtd_linhas)
+
+# Salva os dados combinados em um CSV final
 path_dados_combinados = 'data_processed/dados_combinados.csv'
 dados_fusao.salvando_dados(path_dados_combinados)
 print(f'Dados combinados salvos em: {path_dados_combinados}')
-
